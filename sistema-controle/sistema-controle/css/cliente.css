@@ -1,0 +1,6 @@
+        /* Definindo as cores do status */
+        .status-entregue { background-color: #28a745; color: white; }
+        .status-aguardando-chamado { background-color: #ffc107; color: black; }
+        .status-problema { background-color: #dc3545; color: white; }
+        .status-nao-aprovado { background-color: #6c757d; color: white; }
+        .status-aguardando-envio { background-color: #17a2b8; color: white; }

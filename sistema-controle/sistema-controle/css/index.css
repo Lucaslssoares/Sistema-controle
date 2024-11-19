@@ -1,0 +1,19 @@
+/* Imagem de fundo */
+body {
+    background-image: url('../img/microdatatel.png'); /* Caminho relativo à pasta css */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+/* Fundo semi-transparente para contraste */
+.container {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+h1, .btn {
+    color: white;
+}

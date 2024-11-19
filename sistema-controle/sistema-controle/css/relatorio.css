@@ -1,0 +1,38 @@
+ /* Esconde os elementos durante a impressão */
+ @media print {
+    body * {
+        visibility: hidden;
+    }
+    .container, .container * {
+        visibility: visible;
+    }
+    .navbar, .navbar * {
+        display: none;
+    }
+    
+    /* Esconde o botão de imprimir durante a impressão */
+    button {
+        display: none !important;
+    }
+
+    /* Esconde a coluna de ações durante a impressão */
+    .acao-col, .acao-col * {
+        display: none !important;
+    }
+
+    /* Garantir que a tabela ocupe toda a largura disponível na impressão */
+    .table-responsive {
+        overflow-x: visible !important; /* Evitar rolagem horizontal */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        width: 100% !important; /* Garantir que a tabela ocupe toda a largura da página */
+        table-layout: fixed; /* Para que as colunas se ajustem melhor */
+    }
+
+    th, td {
+        word-wrap: break-word;
+        white-space: normal; /* Quebra de linha dentro das células */
+    }
+}
