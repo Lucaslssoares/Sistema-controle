@@ -1,7 +1,7 @@
 <?php
 include 'db.php';
 
-// Função para obter aniversariantes do mês
+// Função para obter aniversariantes do mês atual
 function obterAniversarios($pdo) {
     $aniversarios = [];
     $mes_atual = date('m');
@@ -17,48 +17,50 @@ function obterAniversarios($pdo) {
     return $aniversarios;
 }
 
-// Função para obter vencimentos de vacinas no mês atual
+// Função para verificar se a data está dentro dos próximos 31 dias
+function dentroDosProximos31Dias($data) {
+    $data_atual = strtotime("today"); // Data de hoje
+    $data_vencimento = strtotime($data); // Data de vencimento
+    $diferenca_dias = ($data_vencimento - $data_atual) / (60 * 60 * 24); // Diferença em dias
+    return $diferenca_dias >= 0 && $diferenca_dias <= 31; // Verifica se a diferença está entre 0 e 31 dias
+}
+
+// Função para obter vencimentos de vacinas dentro dos próximos 31 dias
 function obterVencimentoVacinas($pdo) {
     $vencimentosVacinas = [];
-    $mes_atual = date('m');
-    $ano_atual = date('Y');
-    $stmt = $pdo->prepare("
-        SELECT f.nome AS nome_colaborador, v.data_validade 
-        FROM vacinas v 
-        JOIN funcionarios f ON v.funcionario_id = f.id 
-        WHERE MONTH(v.data_validade) = ? AND YEAR(v.data_validade) = ?
-    ");
-    $stmt->execute([$mes_atual, $ano_atual]);
-    
+    $stmt = $pdo->prepare("SELECT f.nome AS nome_colaborador, v.data_validade FROM vacinas v JOIN funcionarios f ON v.funcionario_id = f.id");
+    $stmt->execute();
+
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data_vencimento = date('d/m/Y', strtotime($row['data_validade']));
-        $vencimentosVacinas[] = [
-            'tipo' => 'Vacina',
-            'mensagem' => "Vacina de {$row['nome_colaborador']} vence em $data_vencimento"
-        ];
+        $data_vencimento = $row['data_validade'];
+
+        // Verifica se o vencimento está dentro dos próximos 31 dias
+        if (dentroDosProximos31Dias($data_vencimento)) {
+            $vencimentosVacinas[] = [
+                'tipo' => 'Vacina',
+                'mensagem' => "Vacina de {$row['nome_colaborador']} vence em " . date('d/m/Y', strtotime($data_vencimento))
+            ];
+        }
     }
     return $vencimentosVacinas;
 }
 
-// Função para obter vencimentos de treinamentos no mês atual
+// Função para obter vencimentos de treinamentos dentro dos próximos 31 dias
 function obterVencimentoTreinamentos($pdo) {
     $vencimentosTreinamentos = [];
-    $mes_atual = date('m');
-    $ano_atual = date('Y');
-    $stmt = $pdo->prepare("
-        SELECT f.nome AS nome_colaborador, t.data_validade 
-        FROM treinamentos t 
-        JOIN funcionarios f ON t.funcionario_id = f.id 
-        WHERE MONTH(t.data_validade) = ? AND YEAR(t.data_validade) = ?
-    ");
-    $stmt->execute([$mes_atual, $ano_atual]);
+    $stmt = $pdo->prepare("SELECT f.nome AS nome_colaborador, t.data_validade FROM treinamentos t JOIN funcionarios f ON t.funcionario_id = f.id");
+    $stmt->execute();
 
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $data_vencimento = date('d/m/Y', strtotime($row['data_validade']));
-        $vencimentosTreinamentos[] = [
-            'tipo' => 'Treinamento',
-            'mensagem' => "Treinamento de {$row['nome_colaborador']} vence em $data_vencimento"
-        ];
+        $data_vencimento = $row['data_validade'];
+
+        // Verifica se o vencimento está dentro dos próximos 31 dias
+        if (dentroDosProximos31Dias($data_vencimento)) {
+            $vencimentosTreinamentos[] = [
+                'tipo' => 'Treinamento',
+                'mensagem' => "Treinamento de {$row['nome_colaborador']} vence em " . date('d/m/Y', strtotime($data_vencimento))
+            ];
+        }
     }
     return $vencimentosTreinamentos;
 }
@@ -130,7 +132,6 @@ try {
         </ul>
         <a href="index.php" class="btn btn-secondary mt-3">Voltar</a>
     </div>
-
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

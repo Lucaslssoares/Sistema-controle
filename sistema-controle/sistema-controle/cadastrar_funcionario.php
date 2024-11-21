@@ -1,19 +1,41 @@
 <?php
-include 'db.php';
+include 'db.php'; // Inclui a conexão com o banco de dados
 
+// Função de validação de telefone (formato brasileiro)
+function validarTelefone($telefone) {
+    $padrao = "/^\(?\d{2}\)?\s?\d{4,5}-\d{4}$/";
+    if (preg_match($padrao, $telefone)) {
+        return true;
+    }
+    return false;
+}
+
+function sanitizarTelefone($telefone) {
+    return preg_replace("/[^0-9]/", "", $telefone);
+}
+
+// Processamento do formulário
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $_POST['nome'];
     $data_nascimento = $_POST['data_nascimento'];
     $contato = $_POST['contato'];
     $cargo = $_POST['cargo'];
 
-    $stmt = $pdo->prepare("INSERT INTO funcionarios (nome, data_nascimento, contato, cargo) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$nome, $data_nascimento, $contato, $cargo]);
+    // Sanitizar e validar telefone
+    $contato_sanitizado = sanitizarTelefone($contato);
+    if (!validarTelefone($contato)) {
+        $erro = "Erro: O número de telefone fornecido é inválido. Use o formato (XX) XXXX-XXXX ou (XX) XXXXX-XXXX.";
+    } else {
+        // Aqui a conexão com o banco de dados deve estar funcionando corretamente
+        $stmt = $pdo->prepare("INSERT INTO funcionarios (nome, data_nascimento, contato, cargo) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$nome, $data_nascimento, $contato_sanitizado, $cargo]);
 
-    header("Location: index.php");
-    exit;
+        header("Location: index.php");
+        exit;
+    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -22,6 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar Funcionário</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Incluindo a biblioteca Inputmask -->
+    <script src="https://cdn.jsdelivr.net/npm/inputmask/dist/inputmask.min.js"></script>
 </head>
 <body>
 
@@ -39,54 +63,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a class="nav-link" href="index.php">Home <span class="sr-only">(atual)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="cadastrar_funcionario.php">Cadastrar funcionário</a>
+                <a class="nav-link" href="visualizar_funcionarios.php">funcionários</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="cadastrar_treinamento.php">Cadastrar treinamento</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="cadastrar_vacina.php">Cadastrar vacina</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="cadastro_cliente.php">Cadastrar cliente</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="relatorio_clientes.php">Relatório</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="avisos.php">Avisos</a>
-            </li>
+           
         </ul>
     </div>
 </nav>
 
 <div class="container my-5">
     <h2>Cadastrar Funcionário</h2>
+    
+    <!-- Exibir erro se houver algum -->
+    <?php if (isset($erro)): ?>
+        <div class="alert alert-danger">
+            <?php echo $erro; ?>
+        </div>
+    <?php endif; ?>
+    
+    <!-- Formulário de cadastro -->
     <form method="POST">
         <div class="form-group">
             <label for="nome">Nome</label>
-            <input type="text" class="form-control" id="nome" name="nome" required>
+            <input type="text" class="form-control" id="nome" name="nome" autocomplete="off" required>
         </div>
         <div class="form-group">
             <label for="data_nascimento">Data de Nascimento</label>
             <input type="date" class="form-control" id="data_nascimento" name="data_nascimento" required>
         </div>
         <div class="form-group">
-            <label for="contato">Contato</label>
-            <input type="text" class="form-control" id="contato" name="contato" required>
+            <label for="contato">Telefone</label>
+            <input type="text" class="form-control" id="contato" name="contato" autocomplete="off" required>
         </div>
         <div class="form-group">
             <label for="cargo">Cargo</label>
-            <input type="text" class="form-control" id="cargo" name="cargo" required>
+            <input type="text" class="form-control" id="cargo" name="cargo" autocomplete="off" required>
         </div>
         <button type="submit" class="btn btn-primary">Cadastrar</button>
     </form>
 </div>
 
-<!-- Bootstrap JS, Popper.js, and jQuery -->
+<!-- Bootstrap JS, Popper.js, and jQuery, diretorio para scprit -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="js/cadastrar_funcionario.js"></script>
 
 </body>
 </html>
