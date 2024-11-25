@@ -112,15 +112,16 @@ try {
     <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 mb-4">
         <a href="cadastrar_funcionario.php" class="btn btn-primary w-100 w-sm-auto">Cadastrar Funcionário</a>
         <a href="cadastro_cliente.php" class="btn btn-primary w-100 w-sm-auto">Cadastrar Cliente</a>
-        <a href="cadastrar_treinamento.php" class="btn btn-success w-100 w-sm-auto">Cadastrar Treinamento</a>
-        <a href="cadastrar_vacina.php" class="btn btn-info w-100 w-sm-auto">Registrar Vacinação</a>
-        <a href="avisos.php" class="btn btn-warning w-100 w-sm-auto">Ver Avisos</a>
-        <a href="menu.php" class="btn btn-warning w-100 w-sm-auto">Menu</a>
+        <a href="cadastrar_treinamento.php" class="btn btn-primary w-100 w-sm-auto">Cadastrar Treinamento</a>
+        <a href="cadastrar_vacina.php" class="btn btn-primary w-100 w-sm-auto">Registrar Vacinação</a>
+        <a href="avisos.php" class="btn btn-primary w-100 w-sm-auto">Ver Avisos</a>
+        <a href="menu.php" class="btn btn-dark w-100 w-sm-auto">Menu</a>
     </div>
 
     <!-- Exibição dos Avisos -->
-    <h3 class="text-center mb-4">Avisos do Mês</h3>
-    
+    <div class=" text-center mb-4">
+  <h3 class="text-white">Avisos do Mês</h3>
+</div>
     <!-- Avisos em cards -->
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         <?php foreach ($avisos as $aviso): ?>

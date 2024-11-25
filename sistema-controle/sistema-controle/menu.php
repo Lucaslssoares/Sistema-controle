@@ -26,9 +26,9 @@
 <div class="container my-5">
     <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
         <a href="visualizar_funcionarios.php" class="btn btn-primary w-100 w-sm-auto">Funcionários</a>
-        <a href="visualizar_treinamentos.php" class="btn btn-success w-100 w-sm-auto">Treinamentos</a>
-        <a href="relatorio_clientes.php" class="btn btn-info w-100 w-sm-auto">Relatório Clientes</a>
-        <a href="visualizar_vacinas.php" class="btn btn-warning w-100 w-sm-auto">vacinas</a>
+        <a href="visualizar_treinamentos.php" class="btn btn-primary w-100 w-sm-auto">Treinamentos</a>
+        <a href="relatorio_clientes.php" class="btn btn-primary w-100 w-sm-auto">Relatório Clientes</a>
+        <a href="visualizar_vacinas.php" class="btn btn-primary w-100 w-sm-auto">vacinas</a>
     </div>
 </div>
 
