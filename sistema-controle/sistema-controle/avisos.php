@@ -104,18 +104,6 @@ try {
                 <a class="nav-link" href="index.php">Home <span class="sr-only">(atual)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="cadastrar_funcionario.php">Cadastrar funcionário</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="cadastrar_vacina.php">Cadastrar vacina</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="cadastro_cliente.php">Cadastrar cliente</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="relatorio_clientes.php">Relatório</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="avisos.php">Avisos</a>
             </li>
         </ul>
